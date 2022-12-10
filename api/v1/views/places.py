@@ -129,6 +129,7 @@ def places_search():
         abort(400, description="Not a JSON")
 
     data = request.get_json()
+    print(data)
 
     if data and len(data):
         states = data.get('states', None)
@@ -171,10 +172,7 @@ def places_search():
                        if all([am in place.amenities
                                for am in amenities_obj])]
 
-    places = []
-    for p in list_places:
-        d = p.to_dict()
-        d.pop('amenities', None)
-        places.append(d)
+    places = list(map(lambda x: x.to_dict().pop('amenities', None),
+                      list_places))
 
     return jsonify(places)
